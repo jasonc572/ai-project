@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Northside Medical Center",
+    "address": "100 North St, Springfield",
+    "latitude": 39.8028,
+    "longitude": -89.6436,
+    "treatments": ["primary care", "immunization", "diabetes"],
+    "available": true
+  },
+  {
+    "name": "Downtown Urgent Care",
+    "address": "45 Market Ave, Springfield",
+    "latitude": 39.7817,
+    "longitude": -89.6500,
+    "treatments": ["urgent care", "minor surgery", "flu treatment"],
+    "available": true
+  },
+  {
+    "name": "Westbrook Therapy Clinic",
+    "address": "245 Westbrook Rd, Capital City",
+    "latitude": 39.9234,
+    "longitude": -89.5234,
+    "treatments": ["physical therapy", "mental health", "chronic disease management"],
+    "available": true
+  },
+  {
+    "name": "Lakeside Health Hub",
+    "address": "12 Lakeview Dr, Riverdale",
+    "latitude": 40.0154,
+    "longitude": -89.5401,
+    "treatments": ["general health", "pediatrics", "senior care"],
+    "available": false
+  },
+  {
+    "name": "East Valley Clinic",
+    "address": "500 East Valley Blvd, Capital City",
+    "latitude": 39.9300,
+    "longitude": -89.5100,
+    "treatments": ["urgent care", "mental health", "women's health"],
+    "available": true
+  }
+]
