@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Age-based Medical Checklist</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:2rem}
+    label,input,button{font-size:1rem}
+    .out{margin-top:1rem}
+    .hint{color:#555;font-size:.9rem}
+  </style>
+</head>
+<body>
+  <h1>Medical Checkup Helper</h1>
+  <p class="hint">Enter your age to get a suggested checklist of medical checks. Optional: paste your MEDICAL_API_KEY to fetch extra resources.</p>
+
+  <div>
+    <label for="age">Age:</label>
+    <input id="age" type="number" min="0" max="130" />
+    <label for="api">MEDICAL_API_KEY (optional):</label>
+    <input id="api" type="password" placeholder="sk-..." />
+    <button id="go">Get checklist</button>
+  </div>
+
+  <div class="out" id="result"></div>
+
+  <script>
+    const go=document.getElementById('go');
+    const ageInput=document.getElementById('age');
+    const apiInput=document.getElementById('api');
+    const result=document.getElementById('result');
+
+    function basicChecklist(age){
+      age = Number(age);
+      const checks = [];
+      if (age < 1) {
+        checks.push('Newborn screening, immunizations, growth monitoring');
+      } else if (age < 18) {
+        checks.push('Routine pediatric checkups, immunizations, vision and hearing tests');
+      } else {
+        checks.push('Blood pressure, BMI, basic metabolic panel, lipid profile');
+        if (age >= 18 && age < 35) checks.push('Sexual health screening as appropriate, mental health check');
+        if (age >= 35) checks.push('Diabetes screening (A1C), thyroid function if symptomatic');
+        if (age >= 45) checks.push('Colorectal cancer screening discussion, cardiac risk assessment');
+        if (age >= 50) checks.push('Colonoscopy screening per guidelines, bone density discussion');
+        if (age >= 65) checks.push('Vaccinations (flu, shingles, pneumococcal), fall risk and cognitive screening');
+      }
+      return checks;
+    }
+
+    async function fetchMedicalResources(apiKey, age){
+      // Placeholder for integration with a medical API using an API key.
+      // This function demonstrates how an API call could be made; it does not
+      // contact any real service without a valid endpoint and key.
+      if (!apiKey) return null;
+      try{
+        const resp = await fetch('https://api.example-medical.com/resources', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey
+          },
+          body: JSON.stringify({age})
+        });
+        if (!resp.ok) return {error: 'API request failed: '+resp.status};
+        return await resp.json();
+      }catch(e){
+        return {error: e.message};
+      }
+    }
+
+    go.addEventListener('click', async ()=>{
+      const age = ageInput.value;
+      const apiKey = apiInput.value.trim();
+      if (age === ''){ result.textContent = 'Please enter your age.'; return; }
+      const list = basicChecklist(age);
+      result.innerHTML = '<h2>Suggested checks</h2><ul>' + list.map(i=>' <li>'+i+'</li>').join('') + '</ul>';
+      if (apiKey){
+        result.innerHTML += '<p>Fetching additional resources...</p>';
+        const res = await fetchMedicalResources(apiKey, age);
+        if (!res) result.innerHTML += '<p>No extra resources returned.</p>';
+        else if (res.error) result.innerHTML += '<p>Error: '+res.error+'</p>';
+        else result.innerHTML += '<pre>'+JSON.stringify(res, null, 2)+'</pre>';
+      }
+    });
+  </script>
+</body>
+</html>
